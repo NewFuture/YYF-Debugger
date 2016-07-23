@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "YYF调试工具",
+    "description": "API 调试数据"
+  },
+  "appDesc": {
+    "message": "YYF 响应头数据(header)调试数据输出", 
+    "description":"REST 接口测试,调试信息输出,显示header中特定的头用于显示"
+  }
+}

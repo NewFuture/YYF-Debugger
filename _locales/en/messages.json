@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "YYF Debugger"
+  },
+  "appDesc": {
+    "message": "dislpay the debugger info in response header of the YYF RESTful frameworker"
+  }
+}
