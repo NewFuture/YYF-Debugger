@@ -1,18 +1,16 @@
 {
-    "version": "1.0.0",
+    "version": "1.1.22",
     "manifest_version": 2,
 
     "name": "__MSG_appName__",
     "description": "__MSG_appDesc__",
-    "default_locale":"zh_CN",
+    "default_locale": "zh_CN",
 
-    "content_scripts": [
-        {
-            "matches": ["http://*/*", "https://*/*"],
-            "js": ["main.js"],
-            "run_at": "document_start"
-        }
-    ],
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["main.js"],
+        "run_at": "document_start"
+    }],
     "background": {
         "scripts": ["background.js"]
     },
@@ -20,8 +18,7 @@
         "default_title": "YYF Debugger"
     },
 
-    "permissions":
-    [
+    "permissions": [
         "webRequest",
         "tabs",
         "http://*/*",
