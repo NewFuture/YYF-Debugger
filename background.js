@@ -2,9 +2,9 @@
 (function() {
   'use strict';
 
-  var active = false;
+  var active = true;
   var ACTIVE_ICON = '';
-  var ACTIVE_NAME = 'YYF (Debugging)';
+  var ACTIVE_NAME = 'Debug YYF (active)';
   var INACTIVE_ICON = '';
   var INACTIVE_NAME = 'YYF Debugger (stop)';
 

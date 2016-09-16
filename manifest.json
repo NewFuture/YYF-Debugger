@@ -6,6 +6,9 @@
     "description": "__MSG_appDesc__",
     "default_locale": "zh_CN",
 
+    "author": "New Future",
+    "homepage_url": "https://github.com/NewFuture/YYF-Debugger",
+
     "content_scripts": [{
         "matches": ["http://*/*", "https://*/*"],
         "js": ["main.js"],
