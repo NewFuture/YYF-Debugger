@@ -2,9 +2,10 @@
 (function() {
   'use strict';
   var local_storage = null;
+  var proccessd_request_id = [];
   var YYF_FLAG = 'YYF';
   var PRE_HEADER = 'yyf-';
-  var TRACER_KEY = ['time', 'mem', 'file'];
+  var TRACER_KEY = ['time', 'mem', 'file', 'tracer'];
   /**不同数据显示样式*/
   var CSS = {
     DEFAULT: ';',
@@ -47,8 +48,15 @@
   };
 
 
-
+  //处理响应数据
   function _process(detail) {
+
+    if (proccessd_request_id.includes(detail.requestId)) {
+      return; //防止重复处理
+    } else {
+      proccessd_request_id.push(detail.requestId);
+    }
+
     var version = detail.responseHeaders.find(function(h) {
       return h.name === YYF_FLAG;
     });
@@ -56,23 +64,48 @@
       var server = detail.responseHeaders.find(function(h) {
         return h.name === "X-Powered-By";
       });
+      var type = detail.responseHeaders.find(function(h) {
+        return h.name === "Content-Type";
+      });
+      type = type ? _parseContentType(type.value) : '';
+
       server = undefined === server ? '' : ' ' + server.value;
       console.group(
-        '%c' + detail.method + ' %c' + detail.url + ' %c[%c' + detail.statusCode + '%c](YYF:%c' + version.value + '%c' + server + '%c)',
-        CSS.METHOD(detail.method),
-        CSS.STATUS(detail.statusCode),
+        '%c%s %c%s %c[%c%i%c](YYF:%c%s%c%s%c)%c<%s>',
+        CSS.METHOD(detail.method), detail.method,
+        CSS.STATUS(detail.statusCode), detail.url,
         CSS.DEFAULT,
-        CSS.STATUS(detail.statusCode),
+        CSS.STATUS(detail.statusCode), detail.statusCode,
         CSS.DEFAULT,
-        CSS.YYF,
-        CSS.SERVER,
-        CSS.DEFAULT
+        CSS.YYF, version.value,
+        CSS.SERVER, server,
+        CSS.DEFAULT,
+        CSS.GRAY, type
       );
       detail.responseHeaders.forEach(_displayHeader);
       console.groupEnd();
     }
   }
 
+  function _parseContentType(type) {
+    var TYPEMAP = {
+      'application/json': 'JSON',
+      'text/html': 'HTML',
+      'application/xml': 'XML',
+      'text/plain': 'TXET',
+      'text/javascript': 'JS',
+      'text/css': 'CSS'
+    }
+    if (!type) {
+      return '';
+    }
+    for (var t in TYPEMAP) {
+      if (type.includes(t)) {
+        return TYPEMAP[t];
+      }
+    }
+    return type;
+  }
   //解析显示header
   function _displayHeader(header) {
     var key = header.name.toLowerCase();

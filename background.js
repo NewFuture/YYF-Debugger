@@ -8,8 +8,8 @@
   var INACTIVE_ICON = '';
   var INACTIVE_NAME = 'YYF Debugger (stop)';
 
-  // list of all tabs with chrome logger enabled
-  var tabsWithExtensionEnabled = [];
+  // list of all tabs with enabled
+  var tabsWithExtensionEnabled = ['yyf.yunyin.org', 'http://192.168.23.33/', 'localhost', '127.0.0.1'];
 
   /**
    * handles a click on the extension icon
@@ -103,7 +103,9 @@
    * @return  void
    */
   function _handleTabUpdated(tabId, changeInfo, tab) {
-    _handleTabEvent(tab);
+    if (changeInfo.status === "loading") {
+      _handleTabEvent(tab);
+    }
   }
 
   /**
@@ -136,9 +138,15 @@
     chrome.tabs.onActivated.addListener(_handleTabActivated);
     chrome.tabs.onCreated.addListener(_handleTabEvent);
     chrome.tabs.onUpdated.addListener(_handleTabUpdated);
+    var handled_requestId = [];
 
     chrome.webRequest.onResponseStarted.addListener(function(details) {
       if (tabsWithExtensionEnabled.indexOf(details.tabId) !== -1) {
+        if (handled_requestId.includes(details.requestId)) {
+          return;
+        } else {
+          handled_requestId.push(details.requestId);
+        }
         chrome.tabs.sendMessage(details.tabId, {
           name: "header_update",
           details: details
@@ -149,7 +157,8 @@
         });
       }
     }, {
-      urls: ["<all_urls>"]
+      types: ["main_frame", "sub_frame", "xmlhttprequest"],
+      urls: ['http://*/*', 'https://*/*']
     }, ["responseHeaders"]);
 
     chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
