@@ -32,65 +32,69 @@
 <a id="yyf-debugger" class="anchor" href="#yyf-debugger" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>YYF Debugger</h1>
 
 <h2>
-<a id="yyf-浏览器调试工具" class="anchor" href="#yyf-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>YYF 浏览器调试工具<img src="icon/logo.min.svg" alt="logo">
+<a id="yyf-浏览器调试工具-" class="anchor" href="#yyf-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>YYF 浏览器调试工具 <img src="icon/logo.min.svg" alt="logo">
 </h2>
 
-<p>在浏览器console显示YYF调试信息，不影响浏览器的正常输出.</p>
+<p>在浏览器console显示<a href="https://github.com/YunYinORG/YYF">YYF</a>调试信息，不影响浏览器的正常输出.</p>
 
 <h2>
 <a id="效果截图" class="anchor" href="#%E6%95%88%E6%9E%9C%E6%88%AA%E5%9B%BE" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>效果截图</h2>
 
-<p>如图在浏览器中显示调试信息
-<img src="images/console.png" alt="console with yyf debbugger"></p>
+<p>如图在浏览器中显示调试信息 <img src="images/console.png" alt="console with yyf debbugger"></p>
 
 <h2>
 <a id="安装一分钟" class="anchor" href="#%E5%AE%89%E8%A3%85%E4%B8%80%E5%88%86%E9%92%9F" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装（一分钟）</h2>
 
 <h3>
-<a id="方法一安装已经打包的扩展-推荐" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%B8%80%E5%AE%89%E8%A3%85%E5%B7%B2%E7%BB%8F%E6%89%93%E5%8C%85%E7%9A%84%E6%89%A9%E5%B1%95-%E6%8E%A8%E8%8D%90" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法一：安装已经打包的扩展 (推荐)</h3>
+<a id="方法一从源码安装推荐" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%B8%80%E4%BB%8E%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%8E%A8%E8%8D%90" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法一：从源码安装(推荐)</h3>
 
 <ol>
-<li>在<a href="https://github.com/NewFuture/YYF-Debugger/releases/">realease页</a>下载最新扩展 <a href="https://github.com/NewFuture/YYF-Debugger/releases/download/v1.1.22/YYF-Debugger-1.1.22.crx">YYF-Debugger-*.crx</a>
+<li>下载解压<a href="https://github.com/NewFuture/YYF-Debugger/archive/master.zip">源码</a>,或者<code>git clone https://github.com/NewFuture/YYF-Debugger.git</code>
 </li>
-<li>打开chrome扩展页面 <a href="chrome://extensions/">chrome://extensions/</a></li>
+<li>打开扩展页面chrome://extensions/,然后勾选<code>开发者模式</code>
+</li>
+<li>加载已解压的扩展程序,选中解压后的文件夹(包含'manifest.json'的文件夹)</li>
+</ol>
+
+<h3>
+<a id="方法二安装已经打包的扩展" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E5%AE%89%E8%A3%85%E5%B7%B2%E7%BB%8F%E6%89%93%E5%8C%85%E7%9A%84%E6%89%A9%E5%B1%95" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法二：安装已经打包的扩展</h3>
+
+<ol>
+<li>在<a href="https://github.com/NewFuture/YYF-Debugger/releases/">realease页</a> 下载最新扩展 <code>YYF-Debugger-*.crx</code>
+</li>
+<li>打开chrome扩展页面chrome://extensions/</li>
 <li>将下载文件拖拽到chrome://extensions/,选择安装即可</li>
 </ol>
 
 <h3>
-<a id="方法二从源码安装" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E4%BB%8E%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法二：从源码安装</h3>
+<a id="安装完成验证" class="anchor" href="#%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90%E9%AA%8C%E8%AF%81" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装完成(验证)</h3>
 
 <ol>
-<li>下载解压源码</li>
-<li>打开扩展页面chrome://extensions/</li>
-<li>勾选<code>开发者模式</code>
-</li>
-<li>加载已解压的扩展程序</li>
-<li>选中对应的文件夹即可</li>
-</ol>
-
-<h3>
-<a id="安装完成" class="anchor" href="#%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装完成</h3>
-
-<ol>
-<li>打开<a href="http://yyf.yunyin.org">http://yyf.yunyin.org</a>
-</li>
-<li>点击扩展按钮激活(debugging)</li>
-<li>打开控制台(<code>F12</code>),刷新(<code>F5</code>)</li>
-<li>看到和截图一样的输出则完成安装</li>
+<li>打开<a href="http://yyf.yunyin.org">http://yyf.yunyin.org</a>, 然后 打开控制台(<code>F12</code>)</li>
+<li>刷新(<code>F5</code>) 看到如效果图一致的效果说明安装完成</li>
 </ol>
 
 <h3>
 <a id="主要功能" class="anchor" href="#%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>主要功能</h3>
 
 <ul>
-<li>tracer信息记录[如效果图]</li>
-<li>SQL查询显示 <img src="images/sql.png" alt="sql">
+<li>点击图标可开启或者关闭插件(默认已对<code>localhost</code>,<code>yyf.yunyin.org</code>和<code>192.168.23.33</code>等开启)</li>
+<li>tracer信息记录(可以展开) <img src="images/tracer.png" alt="tracer">
 </li>
-<li>显示服务器日志 <img src="images/log.png" alt="logger">
+<li>SQL查询显示(默认自动输出sql查询) <img src="images/sql.png" alt="sql">
 </li>
-</ul>
+<li>
+<p>显示服务器日志(日志级别&gt;=<code>alert</code>会在浏览器弹窗) <img src="images/log.png" alt="logger"></p>
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">//服务器中执行代码如下</span></span>
+<span class="pl-s1"><span class="pl-smi">$logger</span><span class="pl-k">=</span>[</span>
+<span class="pl-s1">  <span class="pl-s"><span class="pl-pds">'</span>ALERT<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>this can also alert a message in client browser!<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">  <span class="pl-s"><span class="pl-pds">'</span>ERROR<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>test ERROR!<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">  <span class="pl-s"><span class="pl-pds">'</span>NOTICE<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>have a look~<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">  <span class="pl-s"><span class="pl-pds">"</span>WARN<span class="pl-pds">"</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>WARNING!!!,WARNING!!!<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">  <span class="pl-s"><span class="pl-pds">'</span>info<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>some information<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">  <span class="pl-s"><span class="pl-pds">'</span>debug<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span>[<span class="pl-s"><span class="pl-pds">'</span>array<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>for <span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>debug<span class="pl-pds">'</span></span>],</span>
+<span class="pl-s1">];</span>
 <span class="pl-s1"><span class="pl-c">//开发模式默认会自动监听系统日志</span></span>
 <span class="pl-s1"><span class="pl-c1">Logger</span><span class="pl-k">::</span>alert(<span class="pl-smi">$logger</span>[<span class="pl-s"><span class="pl-pds">'</span>ALERT<span class="pl-pds">'</span></span>]);</span>
 <span class="pl-s1"><span class="pl-c1">Logger</span><span class="pl-k">::</span>error(<span class="pl-smi">$logger</span>[<span class="pl-s"><span class="pl-pds">'</span>ERROR<span class="pl-pds">'</span></span>]);</span>
@@ -98,28 +102,28 @@
 <span class="pl-s1"><span class="pl-c1">Logger</span><span class="pl-k">::</span>warn(<span class="pl-smi">$logger</span>[<span class="pl-s"><span class="pl-pds">'</span>WARN<span class="pl-pds">'</span></span>]);</span>
 <span class="pl-s1"><span class="pl-c1">Logger</span><span class="pl-k">::</span>info(<span class="pl-smi">$logger</span>[<span class="pl-s"><span class="pl-pds">'</span>info<span class="pl-pds">'</span></span>]);</span>
 <span class="pl-s1"><span class="pl-c1">Logger</span><span class="pl-k">::</span>debug(<span class="pl-smi">$logger</span>[<span class="pl-s"><span class="pl-pds">'</span>debug<span class="pl-pds">'</span></span>]);</span></pre></div>
-
-<ul>
-<li>dump数据<img src="images/dump.png" alt="dump">
 </li>
-</ul>
+<li>
+<p>dump数据(通过header输出数据，而影响页面输出类容) <img src="images/dump.png" alt="dump"></p>
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">//header中dump，不影响页面输出</span></span>
-<span class="pl-s1"> <span class="pl-c1">Debug</span><span class="pl-k">::</span>header()</span>
-<span class="pl-s1">  <span class="pl-k">-&gt;</span>str(<span class="pl-s"><span class="pl-pds">'</span>test string dump<span class="pl-pds">'</span></span>)</span>
-<span class="pl-s1">  <span class="pl-k">-&gt;</span>arr([<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-s"><span class="pl-pds">'</span>3<span class="pl-pds">'</span></span>])</span>
-<span class="pl-s1">  <span class="pl-k">-&gt;</span>int(<span class="pl-c1">2333</span>)</span>
-<span class="pl-s1">  <span class="pl-k">-&gt;</span>aa([<span class="pl-s"><span class="pl-pds">'</span>s<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>])</span>
-<span class="pl-s1">  <span class="pl-k">-&gt;</span>obj(<span class="pl-smi">$this</span>);</span>
-<span class="pl-s1">  <span class="pl-c">//dump到浏览器</span></span>
-<span class="pl-s1">  <span class="pl-c1">Debug</span><span class="pl-k">::</span>dump(<span class="pl-s"><span class="pl-pds">'</span>test string dump<span class="pl-pds">'</span></span>);</span>
-<span class="pl-s1">  <span class="pl-c1">Debug</span><span class="pl-k">::</span>dump([<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-s"><span class="pl-pds">'</span>3<span class="pl-pds">'</span></span>]);</span>
-<span class="pl-s1">  <span class="pl-c1">Debug</span><span class="pl-k">::</span>dump(<span class="pl-c1">2333</span>);</span>
-<span class="pl-s1">  <span class="pl-c1">Debug</span><span class="pl-k">::</span>dump([<span class="pl-s"><span class="pl-pds">'</span>s<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>]);</span>
-<span class="pl-s1">  <span class="pl-c1">Debug</span><span class="pl-k">::</span>dump(<span class="pl-smi">$this</span>);</span></pre></div>
+<span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>header()</span>
+<span class="pl-s1"><span class="pl-k">-&gt;</span>str(<span class="pl-s"><span class="pl-pds">'</span>test string dump<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1"><span class="pl-k">-&gt;</span>arr([<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-s"><span class="pl-pds">'</span>3<span class="pl-pds">'</span></span>])</span>
+<span class="pl-s1"><span class="pl-k">-&gt;</span>int(<span class="pl-c1">2333</span>)</span>
+<span class="pl-s1"><span class="pl-k">-&gt;</span>aa([<span class="pl-s"><span class="pl-pds">'</span>s<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>])</span>
+<span class="pl-s1"><span class="pl-k">-&gt;</span>obj(<span class="pl-smi">$this</span>);</span>
+<span class="pl-s1"><span class="pl-c">//dump到浏览器</span></span>
+<span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>dump(<span class="pl-s"><span class="pl-pds">'</span>test string dump<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>dump([<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-s"><span class="pl-pds">'</span>3<span class="pl-pds">'</span></span>]);</span>
+<span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>dump(<span class="pl-c1">2333</span>);</span>
+<span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>dump([<span class="pl-s"><span class="pl-pds">'</span>s<span class="pl-pds">'</span></span><span class="pl-k">=&gt;</span><span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>]);</span>
+<span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>dump(<span class="pl-smi">$this</span>);</span></pre></div>
+</li>
+</ul>
       </section>
     </div>
 
-
+    
   </body>
 </html>
