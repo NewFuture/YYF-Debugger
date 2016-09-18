@@ -1,70 +1,125 @@
-/* globals alert, chrome */
+/* run background in  chrome */
 (function() {
   'use strict';
-
-  var active = true;
-  var ACTIVE_ICON = '';
+  var ACTIVE_ICON = 'icon/logo_active.ico';
   var ACTIVE_NAME = 'Debug YYF (active)';
-  var INACTIVE_ICON = '';
+  var INACTIVE_ICON = 'icon/logo_stop.ico';
   var INACTIVE_NAME = 'YYF Debugger (stop)';
 
+  // is active now;
+  var isActive = false;
+  // request need to handle
+  var queuedRequests = [];
   // list of all tabs with enabled
-  var tabsWithExtensionEnabled = ['yyf.yunyin.org', 'http://192.168.23.33/', 'localhost', '127.0.0.1'];
+  //记录开启此扩展的标签页
+  var enabledTabs = [];
+  //host 列表
+  var hostList = [];
 
   /**
-   * handles a click on the extension icon
+   *init at first time
+   ×初始化storage
    */
-  function _handleIconClick(tab) {
-    if (tab) {
-      _toggleActivity(tab);
+  function _init() {
+    if (localStorage['host'] === undefined) {
+      for (var variable in localStorage) {
+        delete localStorage[variable];
+      }
+      localStorage['version'] = chrome.app.getDetails().version;
+      hostList = ['localhost', '127.0.0.1', '192.168.23.33', 'yyf.yunyin.org', 'localhost:1122', '127.0.0.1:1122'];
+      localStorage['host'] = hostList;
+    } else {
+      hostList = localStorage.host.split(',');
     }
+    _addListeners();
   }
 
-  function _toggleActivity(tab) {
-    var url = tab.url;
-    var host = _getHost(url);
-    if (_hostIsActive(host)) {
-      delete localStorage[host];
-      _deactivate(tab.id);
-      return;
-    }
-    localStorage[host] = true;
-    _activate(tab.id);
-  }
-
+  /**
+   * 解析url域名
+   */
   function _getHost(url) {
-    url = url.replace(/^(https?:\/\/)/, '', url);
-    var host = url.split('/')[0];
-    return host;
+    return url && (url + '//').split('/', 3)[2];
   }
 
+  /**
+   *判断域名是否激活
+   * @param string host 域名
+   * @todo 模糊匹配
+   */
   function _hostIsActive(url) {
-    return localStorage[url] === "true";
+    return url && hostList.includes(_getHost(url));
   }
 
+  /**
+   * 添加域名
+   * @param string host 域名
+   * @todo 模糊匹配
+   */
+  function _hostAdd(url) {
+    var host = _getHost(url);
+    if (host && !hostList.includes(host)) {
+      hostList.push(host);
+      localStorage.host = hostList;
+    }
+  }
+
+  /**
+   * 删除域名
+   * @param string host 域名
+   * @todo 模糊匹配
+   */
+  function _hostDelete(url) {
+    var host = _getHost(url);
+    var index = hostList.indexOf(host);
+    if (index > -1) {
+      hostList.splice(index, 1);
+      localStorage.host = hostList;
+    }
+  }
+
+
+  /**
+   * 激活标签页
+   * 更新显示
+   * @param int tabId 标签页ID
+   */
   function _activate(tabId) {
-    active = true;
-    if (tabsWithExtensionEnabled.indexOf(tabId) === -1) {
-      tabsWithExtensionEnabled.push(tabId);
-    }
     _setTitle(tabId, ACTIVE_NAME);
-  }
-
-  function _deactivate(tabId) {
-    active = false;
-    var index = tabsWithExtensionEnabled.indexOf(tabId);
-    if (index !== -1) {
-      tabsWithExtensionEnabled.splice(index, 1);
+    _setIcon(tabId, ACTIVE_ICON);
+    isActive = true;
+    if (!enabledTabs.includes(tabId)) {
+      enabledTabs.push(tabId);
     }
-    _setTitle(tabId, INACTIVE_NAME);
   }
 
-  function _setIcon(iconPath) {
+  /**
+   * 停止签页扩展
+   * @param  int tabId 标签页ID
+   */
+  function _deactivate(tabId) {
+    _setTitle(tabId, INACTIVE_NAME);
+    _setIcon(tabId, INACTIVE_ICON);
+    isActive = false;
+    var index = enabledTabs.indexOf(tabId);
+    if (index !== -1) {
+      enabledTabs.splice(index, 1);
+    }
+  }
+
+  /**
+   * 修改icon
+   */
+  function _setIcon(tabId, iconPath) {
+    // return;
     chrome.browserAction.setIcon({
+      tabId: tabId,
       path: iconPath
     });
   }
 
+  /**
+   * 修改title，显示文字
+   */
   function _setTitle(tabId, titleName) {
     chrome.browserAction.getTitle({
       tabId: tabId
@@ -77,29 +132,42 @@
   }
 
   /**
+   * handles a click on the extension icon
+   * 点击图标切换状态
+   * @bug
+   */
+  function _handleIconClick(tab) {
+    if (!(tab && tab.id)) {
+      return;
+    }
+    if (enabledTabs.includes(tab.id)) { //active状态
+      _deactivate(tab.id);
+      _hostDelete(tab.url);
+    } else {
+      _activate(tab.id);
+      _hostAdd(tab.url);
+    }
+  }
+
+  /**
    * A tab has become active.
    * https://developer.chrome.com/extensions/tabs#event-onActivated
-   *
    * @param   {[type]}  activeInfo
-   *
    * @return  void
    */
   function _handleTabActivated(activeInfo) {
     // This is sometimes undefined but an integer is required for chrome.tabs.get
-    if (typeof activeInfo.tabId != 'number') {
-      return;
+    if (typeof activeInfo.tabId === 'number') {
+      chrome.tabs.get(activeInfo.tabId, _handleTabEvent);
     }
-    chrome.tabs.get(activeInfo.tabId, _handleTabEvent);
   }
 
   /**
    * A tab was updated.
    * https://developer.chrome.com/extensions/tabs#event-onUpdated
-   *
    * @param   integer  tabId
    * @param   object   changeInfo
    * @param   object   tab
-   *
    * @return  void
    */
   function _handleTabUpdated(tabId, changeInfo, tab) {
@@ -109,72 +177,74 @@
   }
 
   /**
+   * 检查tab状态
    * Handle an event for any tab. Activate or deactivate the extension for the current tab.
-   *
    * @param   object  tab
-   *
    * @return  void
    */
   function _handleTabEvent(tab) {
-    if (!(tab && tab.active)) {
+    if (!tab) {
       return;
     }
     var id = (typeof tab.id === 'number') ? tab.id : tab.sessionID;
-
-    if (typeof id === 'undefined') {
-      return;
+    if (id && tab.url) {
+      if (_hostIsActive(tab.url)) {
+        _activate(id);
+      } else {
+        _deactivate(id);
+      }
     }
-    if (_hostIsActive(_getHost(tab.url))) {
-      _activate(id);
-      return;
-    }
-
-    _deactivate(id);
   }
 
-  function _addListeners() {
-    var queuedRequests = [];
-    chrome.browserAction.onClicked.addListener(_handleIconClick);
-    chrome.tabs.onActivated.addListener(_handleTabActivated);
-    chrome.tabs.onCreated.addListener(_handleTabEvent);
-    chrome.tabs.onUpdated.addListener(_handleTabUpdated);
-    var handled_requestId = [];
-
-    chrome.webRequest.onResponseStarted.addListener(function(details) {
-      if (tabsWithExtensionEnabled.indexOf(details.tabId) !== -1) {
-        if (handled_requestId.includes(details.requestId)) {
-          return;
-        } else {
-          handled_requestId.push(details.requestId);
+  /**
+   * 处理浏览器请求的响应结果
+   */
+  function _handleResponse(details) {
+    if (isActive && enabledTabs.includes(details.tabId)) {
+      chrome.tabs.sendMessage(details.tabId, {
+        name: "header_update",
+        details: details
+      }, function(response) {
+        if (!response) {
+          queuedRequests.push(details);
         }
-        chrome.tabs.sendMessage(details.tabId, {
-          name: "header_update",
-          details: details
-        }, function(response) {
-          if (!response) {
-            queuedRequests.push(details);
-          }
-        });
-      }
-    }, {
+      });
+    }
+  }
+
+  /**
+   * 消息通讯
+   */
+  function _onMessage(request, sender, sendResponse) {
+    switch (request) {
+      case 'localStorage':
+        sendResponse(localStorage);
+        break;
+      case 'isActive':
+        sendResponse(isActive);
+        break;
+      case 'ready':
+        sendResponse(queuedRequests);
+        queuedRequests = [];
+        break;
+    }
+  }
+
+  /**
+   * 开始事件监听
+   */
+  function _addListeners() {
+    chrome.extension.onMessage.addListener(_onMessage); //数据通信
+    chrome.browserAction.onClicked.addListener(_handleIconClick); //点击图标
+    chrome.tabs.onActivated.addListener(_handleTabActivated); //tab页激活
+    chrome.tabs.onCreated.addListener(_handleTabEvent); //tab页创建
+    chrome.tabs.onUpdated.addListener(_handleTabUpdated); //table页跟新
+    //监听responseheader
+    chrome.webRequest.onResponseStarted.addListener(_handleResponse, {
       types: ["main_frame", "sub_frame", "xmlhttprequest"],
       urls: ['http://*/*', 'https://*/*']
     }, ["responseHeaders"]);
-
-    chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-      switch (request) {
-        case 'localStorage':
-          sendResponse(localStorage);
-          break;
-        case 'isActive':
-          sendResponse(active);
-          break;
-        case 'ready':
-          sendResponse(queuedRequests);
-          queuedRequests = [];
-          break;
-      }
-    });
   }
-  _addListeners();
+
+  _init();
 })();

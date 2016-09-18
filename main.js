@@ -1,7 +1,6 @@
 /* globals chrome, console */
 (function() {
   'use strict';
-  var local_storage = null;
   var proccessd_request_id = [];
   var YYF_FLAG = 'YYF';
   var PRE_HEADER = 'yyf-';
@@ -13,12 +12,20 @@
     URL: 'color:black;font-style: italic;',
     YYF: 'color:teal;',
     SERVER: 'color:yellowgreen;',
-    FILE: 'color:DimGrey;',
     GRAY: 'color:Gray;',
     SQL: 'color:OliveDrab;font-weight:lighter;',
     ERROR: 'color:red;font-weight:bolder',
     DUMP: 'color:DodgerBlue;font-weight:bolder;',
     TRACER: 'color:MediumSlateBlue;font-weight:lighter;',
+    FILE: function(file) { //文件颜色
+      if (file.includes('/Debug')) {
+        return 'color:Silver;font-weight:lighter;';
+      } else if (file.includes('/Bootstrap/dev.php')) {
+        return 'color:Silver;font-weight:bold;';
+      } else {
+        return 'color:sienna;font-weight:bold;';
+      }
+    },
     METHOD: function(method) { //请求方式样式
       var color = 'Black '
       switch (method) {
@@ -75,17 +82,17 @@
     });
     if (version) {
       var server = detail.responseHeaders.find(function(h) {
-        return h.name === "X-Powered-By";
+        return h.name.toLowerCase() === "x-powered-by";
       });
       server = server ? ' ' + server.value : '';
 
       var type = detail.responseHeaders.find(function(h) {
-        return h.name === "Content-Type";
+        return h.name.toLowerCase() === "content-type";
       });
-      type = type ? _parseContentType(type.value) : '';
+      type = type ? ('<' + _parseContentType(type.value) + '>') : '';
 
       YYF_CONSOLE.group(
-        '%c%s %c%s %c[%c%i%c](YYF:%c%s%c%s%c) %c<%s>',
+        '%c%s %c%s %c[%c%i%c](YYF:%c%s%c%s%c) %c%s',
         CSS.METHOD(detail.method), detail.method,
         CSS.STATUS(detail.statusCode), detail.url,
         CSS.DEFAULT,
@@ -360,7 +367,7 @@
           data.length
         );
         data.forEach(function(file, i) {
-          YYF_CONSOLE.log('[%i] %c%s', i, CSS.FILE, file);
+          YYF_CONSOLE.log('[%i] %c%s', i, CSS.FILE(file), file);
         });
         YYF_CONSOLE.info('tips: 调试相关文件(library/Debug*)仅在开发环境下加载');
         break;
@@ -376,6 +383,8 @@
       // if this is not a header update don't do anything
       _process(request.details);
       return sendResponse("done");
+    } else if (request.name === "debug") {
+      console.log(request);
     }
   }
 
@@ -387,11 +396,6 @@
     chrome.extension.onMessage.removeListener(_handleHeaderUpdate);
   }
 
-  function _initStorage() {
-    chrome.extension.sendMessage("localStorage", function(response) {
-      local_storage = response;
-    });
-  }
 
   function _init() {
     _listenForLogMessages();
@@ -399,7 +403,6 @@
       if (response === false) {
         return _stopListening();
       }
-      return _initStorage();
     });
 
     chrome.extension.sendMessage('ready', function(queuedRequests) {
