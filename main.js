@@ -6,6 +6,7 @@
   var YYF_FLAG = 'YYF';
   var PRE_HEADER = 'yyf-';
   var TRACER_KEY = ['time', 'mem', 'file', 'tracer'];
+
   /**不同数据显示样式*/
   var CSS = {
     DEFAULT: ';',
@@ -46,16 +47,28 @@
       return 'color:' + color + '; font-size:small;font-weight:lighter;';
     }
   };
+  /**
+   * 自定义控制台 console not display source line
+   */
+  var YYF_CONSOLE = {
+    _console: function(method) {
+      return function() {
+        setTimeout(console[method].bind.apply(console[method], [console].concat(Array.prototype.slice.call(arguments))));
+      }
+    }
+  };
+  //apply the mthod of
+  ['table', 'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'profile', 'profileEnd', 'time', 'timeEnd', 'timeStamp', 'warn'].forEach(function(method) {
+    YYF_CONSOLE[method] = YYF_CONSOLE._console(method);
+  });
 
 
   //处理响应数据
   function _process(detail) {
-
     if (proccessd_request_id.includes(detail.requestId)) {
       return; //防止重复处理
-    } else {
-      proccessd_request_id.push(detail.requestId);
     }
+    proccessd_request_id.push(detail.requestId);
 
     var version = detail.responseHeaders.find(function(h) {
       return h.name === YYF_FLAG;
@@ -64,14 +77,15 @@
       var server = detail.responseHeaders.find(function(h) {
         return h.name === "X-Powered-By";
       });
+      server = server ? ' ' + server.value : '';
+
       var type = detail.responseHeaders.find(function(h) {
         return h.name === "Content-Type";
       });
       type = type ? _parseContentType(type.value) : '';
 
-      server = undefined === server ? '' : ' ' + server.value;
-      console.group(
-        '%c%s %c%s %c[%c%i%c](YYF:%c%s%c%s%c)%c<%s>',
+      YYF_CONSOLE.group(
+        '%c%s %c%s %c[%c%i%c](YYF:%c%s%c%s%c) %c<%s>',
         CSS.METHOD(detail.method), detail.method,
         CSS.STATUS(detail.statusCode), detail.url,
         CSS.DEFAULT,
@@ -83,7 +97,7 @@
         CSS.GRAY, type
       );
       detail.responseHeaders.forEach(_displayHeader);
-      console.groupEnd();
+      YYF_CONSOLE.groupEnd();
     }
   }
 
@@ -165,14 +179,14 @@
       default:
         type = 'unkown(' + type + ')';
     }
-    console.log('%c[%c%s%c (%s)]:', CSS.GRAY, CSS.DUMP, name, CSS.GRAY, type, value);
+    YYF_CONSOLE.log('%c[%c%s%c (%s)]:', CSS.GRAY, CSS.DUMP, name, CSS.GRAY, type, value);
   }
 
   //sql 查询结果
   function _showSQL(data, id) {
     id = "00".substring(0, 2 - id.length) + id
     data = JSON.parse(data);
-    console.groupCollapsed("%c[SQL %s] %cSQL查询统计 (耗时: %f ms) %c[%s...]",
+    YYF_CONSOLE.groupCollapsed("%c[SQL %s] %cSQL查询统计 (耗时: %f ms) %c[%s...]",
       CSS.SQL,
       id,
       data.E ? CSS.ERROR : CSS.DEFAULT,
@@ -204,7 +218,7 @@
       output["驱动错误信息"] = {
         'value': data.E[2]
       };
-      console.error('SQL 查询出错[%s]：%s (%i)', data.E[0], data.E[2], data.E[1]);
+      YYF_CONSOLE.error('SQL 查询出错[%s]：%s (%i)', data.E[0], data.E[2], data.E[1]);
     }
     //参数
     if (data.P) {
@@ -235,11 +249,11 @@
         'value': data.R
       };
     }
-    console.table(output);
+    YYF_CONSOLE.table(output);
     if (Number.isInteger && Number.isInteger(data.R)) {
-      console.info('tips: 为了数据安全,默认只输出[查询结果]条数,可以修改服务器上[conf/app.ini]配置debug.sql.result=1以显示完整结果');
+      YYF_CONSOLE.info('tips: 为了数据安全,默认只输出[查询结果]条数,可以修改服务器上[conf/app.ini]配置debug.sql.result=1以显示完整结果');
     }
-    console.groupEnd();
+    YYF_CONSOLE.groupEnd();
   }
 
   /**日志输出
@@ -253,27 +267,27 @@
         alert('[' + type + ']' + data);
       case 'critical':
       case 'error':
-        console.error(logmsg, CSS.GRAY, data);
+        YYF_CONSOLE.error(logmsg, CSS.GRAY, data);
         break;
 
       case 'warning':
       case 'warn':
       case 'notice':
-        console.warn(logmsg, CSS.GRAY, data);
+        YYF_CONSOLE.warn(logmsg, CSS.GRAY, data);
         break;
 
       case 'info':
-        console.info(logmsg, CSS.GRAY, data);
+        YYF_CONSOLE.info(logmsg, CSS.GRAY, data);
         break;
 
       case 'debug':
-        console.debug(logmsg, CSS.GRAY, data);
+        YYF_CONSOLE.debug(logmsg, CSS.GRAY, data);
         break;
       case 'assert': //断言
-        console.assert(false, data);
+        YYF_CONSOLE.assert(false, data);
         break;
       default:
-        console.log(logmsg, CSS.GRAY, data);
+        YYF_CONSOLE.log(logmsg, CSS.GRAY, data);
     }
   }
 
@@ -287,7 +301,7 @@
 
     switch (type) {
       case 'mem': //内存
-        console.groupCollapsed('%c[memory]%c 内存消耗统计 (峰值: %i KB)',
+        YYF_CONSOLE.groupCollapsed('%c[memory]%c 内存消耗统计 (峰值: %i KB)',
           CSS.TRACER,
           CSS.DEFAULT,
           data.M);
@@ -305,14 +319,14 @@
             'comment': '整个请求内存占用峰值'
           }
         }
-        console.table(data);
-        console.info('tips: 开发环境加载调试插件会消耗额外内存');
+        YYF_CONSOLE.table(data);
+        YYF_CONSOLE.info('tips: 开发环境加载调试插件会消耗额外内存');
         break;
 
       case 'time': //时间
         var total = data.S + data.P + data.U;
         total = Math.round(total * 1000) / 1000;
-        console.groupCollapsed('%c[_time_]%c 时间消耗统计 (总计: %f ms)',
+        YYF_CONSOLE.groupCollapsed('%c[_time_]%c 时间消耗统计 (总计: %f ms)',
           CSS.TRACER,
           CSS.DEFAULT,
           total);
@@ -334,27 +348,27 @@
             'comment': '从请求到处理完成结束耗时'
           }
         }
-        console.table(data);
-        console.info('tips: 启动阶段:包括服务器url重写耗时(这部分不属于PHP)');
-        console.info('tips: 分发阶段：开发环境加载调试插件会占用大部分时间');
+        YYF_CONSOLE.table(data);
+        YYF_CONSOLE.info('tips: 启动阶段:包括服务器url重写耗时(这部分不属于PHP)');
+        YYF_CONSOLE.info('tips: 分发阶段：开发环境加载调试插件会占用大部分时间');
         break;
 
       case 'file': //文件
-        console.groupCollapsed('%c[_file_]%c 文件加载统计 (总计: %i)',
+        YYF_CONSOLE.groupCollapsed('%c[_file_]%c 文件加载统计 (总计: %i)',
           CSS.TRACER,
           CSS.DEFAULT,
           data.length
         );
         data.forEach(function(file, i) {
-          console.log('[%i] %c%s', i, CSS.FILE, file);
+          YYF_CONSOLE.log('[%i] %c%s', i, CSS.FILE, file);
         });
-        console.info('tips: 调试相关文件(library/Debug*)仅在开发环境下加载');
+        YYF_CONSOLE.info('tips: 调试相关文件(library/Debug*)仅在开发环境下加载');
         break;
       default:
-        console.groupCollapsed(type);
-        console.log(data);
+        YYF_CONSOLE.groupCollapsed(type);
+        YYF_CONSOLE.log(data);
     };
-    console.groupEnd();
+    YYF_CONSOLE.groupEnd();
   }
 
   function _handleHeaderUpdate(request, sender, sendResponse) {
