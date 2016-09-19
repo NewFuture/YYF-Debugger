@@ -193,13 +193,12 @@
   function _showSQL(data, id) {
     id = "00".substring(0, 2 - id.length) + id
     data = JSON.parse(data);
-    YYF_CONSOLE.groupCollapsed("%c[SQL %s] %cSQL查询统计 (耗时: %f ms) %c[%s...]",
-      CSS.SQL,
-      id,
+    var sql = data.Q;
+    YYF_CONSOLE.groupCollapsed("%c[SQL %s] %cSQL查询信息 (耗时: %f ms) %c[%s]",
+      CSS.SQL, id,
       data.E ? CSS.ERROR : CSS.DEFAULT,
       data.T,
-      CSS.GRAY,
-      data.Q.substring(0, 10)
+      CSS.GRAY, data.Q.substring(0, 6)
     );
     var output = {
       '耗时(ms)': {
@@ -234,6 +233,8 @@
         }
         //依次解析各个查询参数
       for (var p in data.P) {
+        //replace sql template
+        sql = sql.replace(new RegExp("\\" + p + "(?!\\w)", "g"), data.P[p]);
         output["参数" + p] = {
           'value': data.P[p]
         };
@@ -256,6 +257,7 @@
         'value': data.R
       };
     }
+    YYF_CONSOLE.log("%c%s", CSS.SQL, sql);
     YYF_CONSOLE.table(output);
     if (Number.isInteger && Number.isInteger(data.R)) {
       YYF_CONSOLE.info('tips: 为了数据安全,默认只输出[查询结果]条数,可以修改服务器上[conf/app.ini]配置debug.sql.result=1以显示完整结果');
@@ -308,7 +310,7 @@
 
     switch (type) {
       case 'mem': //内存
-        YYF_CONSOLE.groupCollapsed('%c[memory]%c 内存消耗统计 (峰值: %i KB)',
+        YYF_CONSOLE.groupCollapsed('%c[memory]%c 内存消耗信息 (峰值: %i KB)',
           CSS.TRACER,
           CSS.DEFAULT,
           data.M);
@@ -333,7 +335,7 @@
       case 'time': //时间
         var total = data.S + data.P + data.U;
         total = Math.round(total * 1000) / 1000;
-        YYF_CONSOLE.groupCollapsed('%c[_time_]%c 时间消耗统计 (总计: %f ms)',
+        YYF_CONSOLE.groupCollapsed('%c[_time_]%c 时间消耗信息 (总计: %f ms)',
           CSS.TRACER,
           CSS.DEFAULT,
           total);
@@ -361,7 +363,7 @@
         break;
 
       case 'file': //文件
-        YYF_CONSOLE.groupCollapsed('%c[_file_]%c 文件加载统计 (总计: %i)',
+        YYF_CONSOLE.groupCollapsed('%c[_file_]%c 文件加载信息 (总计: %i)',
           CSS.TRACER,
           CSS.DEFAULT,
           data.length
@@ -398,20 +400,21 @@
 
 
   function _init() {
-    _listenForLogMessages();
-    chrome.extension.sendMessage('isActive', function(response) {
-      if (response === false) {
-        return _stopListening();
-      }
-    });
 
-    chrome.extension.sendMessage('ready', function(queuedRequests) {
-      if (queuedRequests) {
-        queuedRequests.forEach(function(request) {
-          _process(request);
+    chrome.extension.sendMessage('isActive', function(response) {
+      if (response) { //active addListener
+        _listenForLogMessages();
+        chrome.extension.sendMessage('ready', function(queuedRequests) {
+          if (queuedRequests) {
+            queuedRequests.forEach(function(request) {
+              _process(request);
+            });
+          }
         });
       }
     });
+
+
   }
   _init();
 })();

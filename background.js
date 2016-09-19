@@ -6,6 +6,9 @@
   var INACTIVE_ICON = 'icon/logo_stop.ico';
   var INACTIVE_NAME = 'YYF Debugger (stop)';
 
+  //host 列表
+  //the default site
+  var hostList = ['localhost', '127.0.0.1', '192.168.23.33', 'yyf.yunyin.org', 'localhost:1122', '127.0.0.1:1122'];
   // is active now;
   var isActive = false;
   // request need to handle
@@ -13,23 +16,19 @@
   // list of all tabs with enabled
   //记录开启此扩展的标签页
   var enabledTabs = [];
-  //host 列表
-  var hostList = [];
+
 
   /**
    *init at first time
-   ×初始化storage
+   *初始化storage
+   *启动 listener
    */
   function _init() {
-    if (localStorage['host'] === undefined) {
-      for (var variable in localStorage) {
-        delete localStorage[variable];
-      }
-      localStorage['version'] = chrome.app.getDetails().version;
-      hostList = ['localhost', '127.0.0.1', '192.168.23.33', 'yyf.yunyin.org', 'localhost:1122', '127.0.0.1:1122'];
-      localStorage['host'] = hostList;
-    } else {
+    if (localStorage['version']) {
       hostList = localStorage.host.split(',');
+    } else {
+      localStorage['version'] = chrome.app.getDetails().version;
+      localStorage['host'] = hostList.join(',');
     }
     _addListeners();
   }
@@ -59,7 +58,7 @@
     var host = _getHost(url);
     if (host && !hostList.includes(host)) {
       hostList.push(host);
-      localStorage.host = hostList;
+      localStorage.host = hostList.join(',');
     }
   }
 
@@ -73,7 +72,7 @@
     var index = hostList.indexOf(host);
     if (index > -1) {
       hostList.splice(index, 1);
-      localStorage.host = hostList;
+      localStorage.host = hostList.join(',');
     }
   }
 
