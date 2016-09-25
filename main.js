@@ -46,12 +46,21 @@
     },
     STATUS: function(code) { //请求状态码样式
       var color =
-        code < 200 ? 'black' :
+        code < 200 ? 'Lavender' :
         code < 300 ? 'LimeGreen' :
         code < 400 ? 'orange' :
         code < 500 ? 'yellow' :
         'red';
-      return 'color:' + color + '; font-size:small;font-weight:lighter;';
+      return 'color:' + color + ';font-size:small;font-weight:bolder;';
+    },
+    URLSTATUS: function(code) {
+      var color =
+        code < 200 ? 'Grey' :
+        code < 300 ? 'MediumSeaGreen' :
+        code < 400 ? 'GoldenRod' :
+        code < 500 ? 'MediumVioletRed' :
+        'FireBrick';
+      return 'background-color:' + color + ';color:#FFFFF0;font-size:small;font-weight:lighter;';
     }
   };
   /**
@@ -92,9 +101,9 @@
       type = type ? ('<' + _parseContentType(type.value) + '>') : '';
 
       YYF_CONSOLE.group(
-        '%c%s %c%s %c[%c%i%c](YYF:%c%s%c%s%c) %c%s',
+        '%c%s %c%s%c [%c%i%c](YYF:%c%s%c%s%c) %c%s',
         CSS.METHOD(detail.method), detail.method,
-        CSS.STATUS(detail.statusCode), detail.url,
+        CSS.URLSTATUS(detail.statusCode), detail.url,
         CSS.DEFAULT,
         CSS.STATUS(detail.statusCode), detail.statusCode,
         CSS.DEFAULT,
