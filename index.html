@@ -3,8 +3,11 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
     <title>YYF-Debugger by NewFuture</title>
   </head>
 
@@ -13,11 +16,9 @@
     <header>
       <div class="container">
         <h1>YYF-Debugger</h1>
-        <h2>YYF调试工具: 在浏览器console中显示header调试信息，不影响正常输出.</h2>
+        <h2>YYF 调试工具: extension for chrome to log header and debug info in console</h2>
 
         <section id="downloads">
-          <img src="icon/logo.min.svg" alt="logo">
-
           <a href="https://github.com/NewFuture/YYF-Debugger/zipball/master" class="btn">Download as .zip</a>
           <a href="https://github.com/NewFuture/YYF-Debugger/tarball/master" class="btn">Download as .tar.gz</a>
           <a href="https://github.com/NewFuture/YYF-Debugger" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
@@ -27,6 +28,14 @@
 
     <div class="container">
       <section id="main_content">
+        <h1>
+<a id="yyf-debugger" class="anchor" href="#yyf-debugger" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>YYF Debugger</h1>
+
+<h2>
+<a id="yyf-浏览器调试工具" class="anchor" href="#yyf-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>YYF 浏览器调试工具</h2>
+
+<p>在浏览器console显示<a href="https://github.com/YunYinORG/YYF">YYF</a>调试信息，不影响浏览器的正常输出.</p>
+
 <h2>
 <a id="效果截图" class="anchor" href="#%E6%95%88%E6%9E%9C%E6%88%AA%E5%9B%BE" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>效果截图</h2>
 
@@ -36,24 +45,19 @@
 <a id="安装一分钟" class="anchor" href="#%E5%AE%89%E8%A3%85%E4%B8%80%E5%88%86%E9%92%9F" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>安装（一分钟）</h2>
 
 <h3>
-<a id="方法一从源码安装推荐" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%B8%80%E4%BB%8E%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%8E%A8%E8%8D%90" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法一：从源码安装(推荐)</h3>
+<a id="方法一从应用商店安装推荐" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%B8%80%E4%BB%8E%E5%BA%94%E7%94%A8%E5%95%86%E5%BA%97%E5%AE%89%E8%A3%85%E6%8E%A8%E8%8D%90" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法一：从应用商店安装(推荐)</h3>
 
-<ol>
-<li>下载解压<a href="https://github.com/NewFuture/YYF-Debugger/archive/master.zip">源码</a>,或者<code>git clone https://github.com/NewFuture/YYF-Debugger.git</code>
-</li>
-<li>打开扩展页面 <a target="_blank" href="chrome://extensions/">chrome://extensions/</a>,然后勾选<code>开发者模式</code>
-</li>
-<li>加载已解压的扩展程序,选中解压后的文件夹(包含<code>manifest.json</code>的文件夹)</li>
-</ol>
+<p>chrome中打开<a href="https://chrome.google.com/webstore/detail/npmimognecgffdlkeppbkfakcdcpgjak">应用商店选择安装</a></p>
 
 <h3>
-<a id="方法二安装已经打包的扩展" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E5%AE%89%E8%A3%85%E5%B7%B2%E7%BB%8F%E6%89%93%E5%8C%85%E7%9A%84%E6%89%A9%E5%B1%95" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法二：安装已经打包的扩展</h3>
+<a id="方法二安装已经打包的扩展-从源码安装推荐" class="anchor" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E5%AE%89%E8%A3%85%E5%B7%B2%E7%BB%8F%E6%89%93%E5%8C%85%E7%9A%84%E6%89%A9%E5%B1%95-%E4%BB%8E%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%8E%A8%E8%8D%90" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>方法二：安装已经打包的扩展 从源码安装(推荐)</h3>
 
 <ol>
-<li>在<a href="https://github.com/NewFuture/YYF-Debugger/releases/">realease页</a> 下载最新扩展 <code>YYF-Debugger-*.crx</code>
+<li>在<a href="https://github.com/NewFuture/YYF-Debugger/releases/">realease页</a>下载稳定版,或者最新<a href="https://github.com/NewFuture/YYF-Debugger/archive/master.zip">源码</a>,或者<code>git clone https://github.com/NewFuture/YYF-Debugger.git</code>
 </li>
-<li>打开chrome扩展页面 <a href="chrome://extensions/">chrome://extensions/</a></li>
-<li>将下载文件拖拽到chrome://extensions/,选择安装即可</li>
+<li>打开扩展页面chrome://extensions/,然后勾选<code>开发者模式</code>
+</li>
+<li>加载已解压的扩展程序,选中解压后的文件夹(包含'manifest.json'的文件夹)</li>
 </ol>
 
 <h3>
@@ -94,7 +98,7 @@
 <span class="pl-s1"><span class="pl-c1">Logger</span><span class="pl-k">::</span>debug(<span class="pl-smi">$logger</span>[<span class="pl-s"><span class="pl-pds">'</span>debug<span class="pl-pds">'</span></span>]);</span></pre></div>
 </li>
 <li>
-<p>dump数据(通过header输出数据，而影响页面输出类容) <img src="images/dump.png" alt="dump"></p>
+<p>dump数据(通过header输出数据，而不影响页面输出类容) <img src="images/dump.png" alt="dump"></p>
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">//header中dump，不影响页面输出</span></span>
 <span class="pl-s1"><span class="pl-c1">Debug</span><span class="pl-k">::</span>header()</span>
@@ -113,5 +117,7 @@
 </ul>
       </section>
     </div>
+
+    
   </body>
 </html>
