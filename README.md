@@ -10,17 +10,15 @@
 
 ## 安装（一分钟）
 
-### 方法一：从源码安装(推荐)
+### 方法一：从应用商店安装(推荐)
 
-1. 下载解压[源码](https://github.com/NewFuture/YYF-Debugger/archive/master.zip),或者`git clone https://github.com/NewFuture/YYF-Debugger.git`
+ chrome中打开[应用商店选择安装](https://chrome.google.com/webstore/detail/npmimognecgffdlkeppbkfakcdcpgjak)
+
+### 方法二：安装已经打包的扩展 从源码安装(推荐)
+
+1. 在[realease页](https://github.com/NewFuture/YYF-Debugger/releases/)下载稳定版,或者最新[源码](https://github.com/NewFuture/YYF-Debugger/archive/master.zip),或者`git clone https://github.com/NewFuture/YYF-Debugger.git`
 2. 打开扩展页面<chrome://extensions/>,然后勾选`开发者模式`
 3. 加载已解压的扩展程序,选中解压后的文件夹(包含'manifest.json'的文件夹)
-
-### 方法二：安装已经打包的扩展
-
-1. 在[realease页](https://github.com/NewFuture/YYF-Debugger/releases/) 下载最新扩展 `YYF-Debugger-*.crx`
-2. 打开chrome扩展页面<chrome://extensions/>
-3. 将下载文件拖拽到<chrome://extensions/>,选择安装即可
 
 ### 安装完成(验证)
 
@@ -53,7 +51,7 @@
   Logger::debug($logger['debug']);
   ```
 
-- dump数据(通过header输出数据，而影响页面输出类容) ![dump](images/dump.png)
+- dump数据(通过header输出数据，而不影响页面输出类容) ![dump](images/dump.png)
 
   ```php
   //header中dump，不影响页面输出
