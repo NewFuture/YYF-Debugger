@@ -1,9 +1,9 @@
 /* run background in  chrome */
 (function() {
   'use strict';
-  var ACTIVE_ICON = 'icon/logo_active.ico';
+  var ACTIVE_ICON = 'icon/active.png';
   var ACTIVE_NAME = 'Debug YYF (active)';
-  var INACTIVE_ICON = 'icon/logo_stop.ico';
+  var INACTIVE_ICON = 'icon/inactive.png';
   var INACTIVE_NAME = 'YYF Debugger (stop)';
 
   //host 列表
